@@ -7,7 +7,7 @@ import httpx
 from .client import AppClient, CliodotError, _segment
 
 class AuthAppClient(AppClient):
-    """Auth app user, MFA, OTP and magic-link operations."""
+    """Manage app users and sign-in security with TOTP MFA, recovery codes, email/SMS one-time passcodes, and magic links."""
     def __init__(self, *, base_url: str, app_id: str, **kw):
         super().__init__(base_url=base_url,app_id=app_id,**kw); self.root=self.base_url+"/auth"
     def _user(self, uid):
@@ -30,7 +30,7 @@ class AuthAppClient(AppClient):
     def magic_link_verify(self, token): return self._request("POST",f"/apps/{_segment(self.app_id or '')}/magic-link/verify",json={"token":token},base_url=self.root)
 
 class OAuthAppClient(AppClient):
-    """OAuth connection management."""
+    """Start app connections, exchange authorization results, and inspect, sync, refresh, revoke, or remove connections."""
     def __init__(self, *, base_url: str, app_id: str, **kw): super().__init__(base_url=base_url,app_id=app_id,**kw); self.root=self.base_url+"/oauth"
     def connect_start(self, **payload): return self._request("POST",f"/apps/{_segment(self.app_id or '')}/connect",json=payload,base_url=self.root)
     def connect_poll(self, **payload): return self._request("POST",f"/apps/{_segment(self.app_id or '')}/connect/poll",json=payload,base_url=self.root)
@@ -43,7 +43,7 @@ class OAuthAppClient(AppClient):
     def delete_connection(self, connection_id): return self._request("DELETE",f"/v1/connections/{_segment(connection_id)}",base_url=self.root)
 
 class IdentityAppClient(AppClient):
-    """Identity App service-to-service authentication."""
+    """Authenticate one Cliodot app to another for trusted service-to-service calls; verify, refresh, or revoke tokens and retrieve public signing keys."""
     def __init__(self, *, base_url: str, app_id: str, **kw): super().__init__(base_url=base_url,app_id=app_id,**kw); self.root=self.base_url+"/identity"
     def me(self): return self._request("GET","/v1/me",base_url=self.root)
     def authenticate(self, target_app_id, **payload): return self._request("POST","/v1/authenticate",json={"target_app_id":target_app_id,**payload},base_url=self.root)
@@ -55,7 +55,7 @@ class IdentityAppClient(AppClient):
     def jwks(self, app_id): return self._request("GET",f"/v1/apps/{_segment(app_id)}/jwks.json",base_url=self.root)
 
 class MemoryAppClient(AppClient):
-    """Memory App store, retrieve, update, delete and search."""
+    """Store and organize app data, retrieve records, update or delete them, and find matching items with filters or search."""
     def __init__(self, *, base_url: str, app_id: str, **kw): super().__init__(base_url=base_url,app_id=app_id,**kw); self.root=self.base_url+"/memory"
     def store(self, **payload): return self._request("POST","/v1/store",json=payload,base_url=self.root)
     def store_many(self, **payload): return self._request("POST","/v1/store-many",json=payload,base_url=self.root)
@@ -66,7 +66,7 @@ class MemoryAppClient(AppClient):
     def search(self, **payload): return self._request("POST","/v1/search",json=payload,base_url=self.root)
 
 class CommercialAppClient(AppClient):
-    """Commercial App billing, usage and wallet operations."""
+    """Check and record usage, inspect customer subscriptions and credits, top up credits, and manage customer wallets."""
     def __init__(self, *, base_url: str, app_id: str, **kw): super().__init__(base_url=base_url,app_id=app_id,**kw); self.root=self.base_url+"/commercial"
     def request(self, method, path, *, data=None, params=None): return self._request(method,path,json=data,params=params,base_url=self.root)
     def check(self, **payload): return self.request("POST","/v1/check",data=payload)
@@ -82,14 +82,14 @@ class CommercialAppClient(AppClient):
     def units(self): return self.request("GET","/v1/units")
 
 class ProviderServicesClient(AppClient):
-    """Provider Services catalog and typed service execution."""
+    """Discover available provider operations and data types, then execute a selected service with its required inputs."""
     def __init__(self, *, base_url: str, app_id: str, **kw): super().__init__(base_url=base_url,app_id=app_id,**kw); self.root=self.base_url+"/provider"
     def execute(self, **payload): return self._request("POST","/v1/execute",json=payload,base_url=self.root)
     def catalog(self): return self._request("GET","/v1/catalog",base_url=self.root)
     def download_types(self): return self._request("GET","/v1/types",base_url=self.root)
 
 class Events(AppClient):
-    """Cliodot event publish/subscribe and Server-Sent Events listen."""
+    """Publish events for other apps to consume, subscribe to event names, manage subscriptions, and receive live updates over Server-Sent Events (SSE)."""
     def __init__(self, *, base_url: str, app_id: str, instance_id: str | None=None, **kw):
         super().__init__(base_url=base_url,app_id=app_id,**kw)
         if not self.app_id: raise CliodotError("Events requires app_id")
@@ -124,7 +124,7 @@ class Events(AppClient):
                     except json.JSONDecodeError: continue
 
 class Surface:
-    """Dynamic Surface SDK: catalog-driven capabilities, e.g. surface.users.get(id)."""
+    """Discover the capabilities exposed by a Cliodot Surface and call supported operations through a catalog-driven, dynamic SDK interface."""
     def __init__(self, *, base_url: str, slug=None, api_key=None, jwt=None, api_key_header="X-API-Key", environment=None, version="1.2.1", timeout=60.0, client=None):
         if not base_url.strip(): raise CliodotError("Surface requires base_url")
         self.base_url=base_url.strip().rstrip("/"); self.slug=slug.strip() if slug else None

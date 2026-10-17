@@ -29,15 +29,15 @@ Clients accept `api_key` (or `app_api_key`), optional `app_secret`, `environment
 
 ## Apps included
 
-- Auth: user records, TOTP MFA, recovery codes, OTP provider and magic-link operations.
-- OAuth: app connection, exchange and connection lifecycle.
-- Identity: service-to-service authenticate, verify, refresh, revoke and JWKS.
-- Memory: store, get, update, delete, find and search.
-- Commercial: usage checks/consumption, customers, subscriptions, credits and wallet basics.
-- Events: publish, subscribe, unsubscribe and SSE listen URL/consumer.
-- Provider Services: catalog, types artifact and execution.
-- Surface capabilities: catalog-driven dynamic operation calls.
-- Webhook helpers: HMAC signature generation and verification.
+- **Auth**: Create or update app-user records and manage sign-in protection, including TOTP multi-factor authentication, recovery codes, email/SMS one-time passcodes, and magic links.
+- **OAuth**: Start app connections, poll for connection completion, exchange authorization results, and inspect, sync, refresh, revoke, or delete connections.
+- **Identity**: Authenticate one Cliodot app to another for trusted service-to-service access; verify access tokens, refresh or revoke tokens, inspect the current identity, and retrieve public signing keys (JWKS).
+- **Memory**: Store records, store multiple records at once, retrieve and update data, delete records, and find or search for matching information.
+- **Commercial**: Check and record usage, inspect account state and customer subscriptions, review credits, top up credits, and list or create customer wallets.
+- **Events**: Publish named events with payloads, subscribe or unsubscribe, and receive live event updates through Server-Sent Events (SSE).
+- **Provider Services**: Browse the available provider-operation catalog and data types, then execute a selected service with the required inputs.
+- **Surface capabilities**: Load the Surface capability catalog and invoke supported operations dynamically, such as retrieving a user through `surface.users.get(id)`.
+- **Webhook helpers**: Generate and verify HMAC webhook signatures, including timestamped signatures.
 
 ## Scope and compatibility
 

@@ -34,3 +34,35 @@ def test_surface_dynamic_capability_lookup():
         return httpx.Response(200,json={"data":{"id":"user-1"}})
     s=Surface(base_url="https://gateway.example.test",client=httpx.Client(transport=httpx.MockTransport(handler)))
     assert s.users.get("user-1")=={"data":{"id":"user-1"}}
+
+def test_commercial_client_exposes_node_sdk_method_surface():
+    from cliodot import CommercialAppClient
+    c = CommercialAppClient(
+        base_url="https://api.example.test",
+        app_id="commercial-a",
+        client=httpx.Client(transport=httpx.MockTransport(lambda r: httpx.Response(200, json={"ok": True}))),
+    )
+    expected = [
+        "check", "consume", "state", "list_customers", "get_customer",
+        "create_customer", "update_customer", "get_customer_subscription",
+        "list_credits", "topup_credits", "list_wallets", "create_wallet",
+        "update_wallet", "get_wallet", "list_accounts", "open_account",
+        "update_account", "get_account", "list_entries", "list_transactions",
+        "get_transaction", "credit", "debit", "transfer", "reverse_transaction",
+        "settle_transaction", "void_transaction", "list_holds", "hold",
+        "capture_hold", "release_hold", "list_units", "create_unit", "exchange",
+        "list_cards", "add_card", "update_card", "remove_card", "set_default_card",
+        "list_features", "get_feature", "list_plans", "get_plan",
+        "list_subscriptions", "get_subscription", "list_invoices", "get_invoice",
+        "create_subscription", "subscribe", "update_pending_subscription",
+        "change_plan", "entitlement_topup", "charge_usage", "renew_subscription",
+        "renew", "list_events", "list_usage_events", "list_event_types",
+        "list_payment_methods", "initiate_payment", "confirm_payment", "quote",
+        "preview_discount", "list_discounts", "list_tax_rates", "list_addons",
+        "assign_seat", "unassign_seat", "issue_license", "validate_license",
+        "revoke_license", "analytics", "analytics_charts", "ledger_analytics",
+        "ledger_analytics_charts",
+    ]
+    missing = [name for name in expected if not callable(getattr(c, name, None))]
+    assert not missing, f"Commercial methods missing: {missing}"
+    c._http.close()

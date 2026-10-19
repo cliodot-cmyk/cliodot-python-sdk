@@ -33,7 +33,7 @@ Clients accept `api_key` (or `app_api_key`), optional `app_secret`, `environment
 - **OAuth**: Start app connections, poll for connection completion, exchange authorization results, and inspect, sync, refresh, revoke, or delete connections.
 - **Identity**: Authenticate one Cliodot app to another for trusted service-to-service access; verify access tokens, refresh or revoke tokens, inspect the current identity, and retrieve public signing keys (JWKS).
 - **Memory**: Store records, store multiple records at once, retrieve and update data, delete records, and find or search for matching information.
-- **Commercial**: Check and record usage, inspect account state and customer subscriptions, review credits, top up credits, and list or create customer wallets.
+- **Commercial**: Usage checks/consumption, customer and subscription lifecycle, credits, wallets/accounts, ledger entries and transactions, holds, units/exchange, cards, plans/features, invoices, payments, discounts/tax/add-ons, seats/licenses, usage events, and analytics. Method names use Python snake_case.
 - **Events**: Publish named events with payloads, subscribe or unsubscribe, and receive live event updates through Server-Sent Events (SSE).
 - **Provider Services**: Browse the available provider-operation catalog and data types, then execute a selected service with the required inputs.
 - **Surface capabilities**: Load the Surface capability catalog and invoke supported operations dynamically, such as retrieving a user through `surface.users.get(id)`.
@@ -41,4 +41,4 @@ Clients accept `api_key` (or `app_api_key`), optional `app_secret`, `environment
 
 ## Scope and compatibility
 
-The API follows the Node SDK's runtime route families (`/auth`, `/oauth`, `/identity`, `/memory`, `/commercial`, `/event`, and `/provider`). Python method names use snake_case. This is an initial port of app-facing runtime APIs; compare the exact endpoint contracts against your deployed Cliodot version before production use. No workflow or connector builders are included.
+The API follows the Node SDK's runtime route families (`/auth`, `/oauth`, `/identity`, `/memory`, `/commercial`, `/event`, and `/provider`). Python method names use snake_case. This remains an app-facing runtime port rather than a full implementation of every Node SDK builder/runtime module. Commercial method coverage has been expanded, but endpoint-by-endpoint parity and live runtime behavior still require review against the canonical Node SDK and deployed Cliodot version before production use. No workflow or connector builders are included.

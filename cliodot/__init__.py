@@ -1,4 +1,3 @@
-from .client import _segment
 """Cliodot Python SDK: runtime Apps and Surface capabilities."""
 from .client import AppClient, CliodotError
 from .apps import AuthAppClient, OAuthAppClient, IdentityAppClient, MemoryAppClient, CommercialAppClient, Events, ProviderServicesClient, Surface
